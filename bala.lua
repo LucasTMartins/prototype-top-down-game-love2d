@@ -26,12 +26,6 @@ function Bala.new(x, y)
         love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
     end
 
-    function self.get_bullet_x(player_x, player_width)
-        local bullet_x = player_x + (player_width / 2) - (self.width / 2)
-
-        return bullet_x
-    end
-
     return self
 end
 
