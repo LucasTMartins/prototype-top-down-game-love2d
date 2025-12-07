@@ -7,8 +7,11 @@ local Player = {
     sprite = nil
 }
 
-function Player.load()
+function Player.load(player_x, player_y)
     Player.sprite = love.graphics.newCanvas(Player.width, Player.height)
+
+    Player.x = player_x
+    Player.y = player_y
 
     love.graphics.setCanvas(Player.sprite)
     local height = Player.height
@@ -25,13 +28,13 @@ function Player.load()
 end
 
 function Player.update(dt)
-    if love.keyboard.isDown('s') then
-        Player.y = Player.y + Player.velocidade * dt
-    end
+    -- if love.keyboard.isDown('s') then
+    --     Player.y = Player.y + Player.velocidade * dt
+    -- end
 
-    if love.keyboard.isDown('w') then
-        Player.y = Player.y - Player.velocidade * dt
-    end
+    -- if love.keyboard.isDown('w') then
+    --     Player.y = Player.y - Player.velocidade * dt
+    -- end
 
     if love.keyboard.isDown('d') then
         Player.x = Player.x + Player.velocidade * dt

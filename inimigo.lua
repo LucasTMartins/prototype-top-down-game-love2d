@@ -4,8 +4,8 @@ function Inimigo.new(x, y)
     local self = {
         x = x,
         y = y,
-        width = 70,
-        height = 70,
+        width = 50,
+        height = 50,
         angle = 0,
         velocidade = 200,
         velocidade_rotacao = 2,
