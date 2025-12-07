@@ -7,9 +7,9 @@ local utils = require "utils"
 -- Player
 local player = require "player"
 
--- Handler Balas
+-- Balas Factory
+local BalaFactory = require "bala"
 local balas = {}
-local tamanho_bala = 10
 
 -- Inimigos Factory
 local InimigoFactory = require "inimigo"
@@ -38,19 +38,15 @@ function love.update(dt)
     -- -1 é o passo (andar para trás)
     for i = #balas, 1, -1 do
         local bala = balas[i]
-        local bala_existe = true
-        bala.y = bala.y - dt * 500
+        bala.update(dt)
 
-        if bala.y < 0 then
+        if bala.isDead then
             table.remove(balas, i)
-            bala_existe = false
-        end
-
-        if bala_existe then
+        else
             for i2 = #inimigos, 1, -1 do
                 local inimigo = inimigos[i2]
-                local esta_colidindo = utils.checkCollisionEnemy(inimigo.x, inimigo.y, tamanho_inimigo, tamanho_inimigo,
-                    bala.x, bala.y, tamanho_bala, tamanho_bala)
+                local esta_colidindo = utils.checkCollisionEnemy(inimigo.x, inimigo.y, inimigo.width, inimigo.height,
+                    bala.x, bala.y, bala.width, bala.height)
 
                 if esta_colidindo then
                     table.remove(balas, i)
@@ -86,7 +82,7 @@ function love.draw()
     -- BALAS
     love.graphics.setColor(1, 1, 1)
     for i, bala in ipairs(balas) do
-        love.graphics.rectangle("fill", bala.x, bala.y, tamanho_bala, tamanho_bala)
+        bala.draw()
     end
 
     -- INIMIGOS
@@ -97,9 +93,8 @@ end
 
 function love.keypressed(key)
     if key == "space" then
-        table.insert(balas, {
-            x = player.x + (player.largura / 2) - (tamanho_bala / 2),
-            y = player.y
-        })
+        local bala_x = BalaFactory.get_bullet_x(player.x, player.largura) 
+        local bala_y = player.y
+        table.insert(balas, BalaFactory.new(bala_x, bala_y))
     end
 end
