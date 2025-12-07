@@ -93,7 +93,7 @@ end
 
 function love.keypressed(key)
     if key == "space" then
-        local bala_x = BalaFactory.get_bullet_x(player.x, player.largura) 
+        local bala_x = BalaFactory.get_bullet_x(player.x, player.width) 
         local bala_y = player.y
         table.insert(balas, BalaFactory.new(bala_x, bala_y))
     end

@@ -2,20 +2,20 @@ local Player = {
     x = 100,
     y = 100,
     velocidade = 300,
-    altura = 40,
-    largura = 30,
+    height = 40,
+    width = 30,
     sprite = nil
 }
 
 function Player.load()
-    Player.sprite = love.graphics.newCanvas(Player.largura, Player.altura)
+    Player.sprite = love.graphics.newCanvas(Player.width, Player.height)
 
     love.graphics.setCanvas(Player.sprite)
-    local altura = Player.altura
-    local largura = Player.largura
-    local meio_horizontal = (largura / 2)
+    local height = Player.height
+    local width = Player.width
+    local meio_horizontal = (width / 2)
 
-    local vertices = {0,altura, meio_horizontal,(altura * 0.7), largura,altura, meio_horizontal,0}
+    local vertices = {0,height, meio_horizontal,(height * 0.7), width,height, meio_horizontal,0}
     local triangles = love.math.triangulate(vertices)
 
     for i, triangle in ipairs(triangles) do
