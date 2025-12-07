@@ -11,16 +11,14 @@ local player = require "player"
 local balas = {}
 local tamanho_bala = 10
 
--- Handler Inimigos
+-- Inimigos Factory
+local InimigoFactory = require "inimigo"
 local inimigos = {}
-local tamanho_inimigo = 100
 
 local spawn_handler = {
     tempo_spawn = 0,
     intervalo_spawn = 2
 }
-
-local angle = 0
 
 -- FUNÇÕES
 function love.load()
@@ -67,25 +65,18 @@ function love.update(dt)
     spawn_handler.tempo_spawn = spawn_handler.tempo_spawn + dt
 
     if spawn_handler.tempo_spawn > spawn_handler.intervalo_spawn then
-        table.insert(inimigos, {
-            x = math.random(0, window_width),
-            y = 0,
-            angle = 0
-        })
+        table.insert(inimigos, InimigoFactory.new(math.random(0, window_width), 0))
         spawn_handler.tempo_spawn = 0
     end
 
     for i = #inimigos, 1, -1 do
-        local inimigo = inimigos[i]
-        inimigo.y = inimigo.y + dt * 200
-        inimigo.angle = inimigo.angle + dt * 100
+        local e = inimigos[i]
+        e.update(dt)
 
-        if inimigo.y > window_height then
+        if e.isDead then
             table.remove(inimigos, i)
         end
     end
-
-    angle = angle + .5 * math.pi * dt
 end
 
 function love.draw()
@@ -99,9 +90,8 @@ function love.draw()
     end
 
     -- INIMIGOS
-    love.graphics.setColor(1, 0, 0)
-    for i, inimigo in ipairs(inimigos) do
-        drawInimigo("fill", inimigo.x, inimigo.y, 100, 100, angle)
+    for i, e in ipairs(inimigos) do
+        e.draw()
     end
 end
 
@@ -112,12 +102,4 @@ function love.keypressed(key)
             y = player.y
         })
     end
-end
-
-function drawInimigo(mode, x, y, width, height, angle)
-    love.graphics.push()
-	love.graphics.translate(x, y)
-	love.graphics.rotate(angle)
-	love.graphics.rectangle(mode, -width/2, -height/2, width, height)
-	love.graphics.pop()
 end
