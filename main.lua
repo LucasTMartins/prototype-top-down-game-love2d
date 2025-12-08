@@ -4,6 +4,7 @@ local window_width, window_height = love.graphics.getDimensions()
 local estado_atual = "menu"
 
 local utils = require "utils"
+local score = 0
 
 -- Player
 local player = require "player"
@@ -103,6 +104,7 @@ function updateGame(dt)
                 if esta_colidindo then
                     table.remove(balas, i)
                     table.remove(inimigos, i2)
+                    score = score + 100
                     break
                 end
             end
@@ -135,6 +137,9 @@ function updateGame(dt)
 end
 
 function drawGame()
+    love.graphics.setColor(1,1,1)
+    love.graphics.print("Score: " .. score, 10, 10)
+
     -- PLAYER
     player.draw()
 
@@ -186,4 +191,5 @@ function resetGame()
     spawn_handler.tempo_spawn = 0
     player.x = player_default_pos.x
     player.y = player_default_pos.y
+    score = 0
 end
