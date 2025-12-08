@@ -5,6 +5,10 @@ local estado_atual = "menu"
 
 local utils = require "utils"
 local score = 0
+local shake_handler = {
+    duration = 0,
+    magnetude = 2
+}
 
 -- Player
 local player = require "player"
@@ -70,7 +74,7 @@ function updateMenu(dt)
 end
 
 function drawMenu()
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.print("Prototipo de TopDownShooter", window_width / 2 - 180, window_height / 2 - 100, 0, 2)
     love.graphics.print("Pressione Enter para Continuar", window_width / 2 - 140, window_height / 2 - 40, 0, 1.5)
 end
@@ -131,13 +135,14 @@ function updateGame(dt)
 
             if esta_colidindo then
                 estado_atual = "gameover"
+                shake_handler.duration = 2
             end
         end
     end
 end
 
 function drawGame()
-    love.graphics.setColor(1,1,1)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.print("Score: " .. score, 10, 10)
 
     -- PLAYER
@@ -170,10 +175,16 @@ end
 
 -- ESTADO GAMEOVER
 function updateGameOver(dt)
+    if shake_handler.duration > 0 then
+        shake_handler.duration = shake_handler.duration - dt
+    end
 end
 
 function drawGameOver()
-    love.graphics.setColor(1,0,0)
+    if shake_handler.duration > 0 then
+        love.graphics.translate(math.random(-shake_handler.magnetude, shake_handler.magnetude), math.random(-shake_handler.magnetude, shake_handler.magnetude))
+    end
+    love.graphics.setColor(1, 0, 0)
     love.graphics.print("GAME OVER", window_width / 2 - 80, window_height / 2 - 100, 0, 2)
     love.graphics.print("Pressione Enter para Continuar", window_width / 2 - 140, window_height / 2 - 40, 0, 1.5)
 end
