@@ -107,7 +107,7 @@ function updateGame(dt)
 
                 if esta_colidindo then
                     table.remove(balas, i)
-                    table.remove(inimigos, i2)
+                    inimigo.isDead = true
                     score = score + 100
                     break
                 end
@@ -128,7 +128,9 @@ function updateGame(dt)
         inimigo.update(dt)
 
         if inimigo.isDead then
-            table.remove(inimigos, i)
+            if inimigo.death_timer < 0 then
+                table.remove(inimigos, i)
+            end
         else
             local esta_colidindo = utils.checkCollisionEnemy(inimigo.x, inimigo.y, inimigo.width, inimigo.height,
                 player.x, player.y, player.width, player.height)
@@ -182,7 +184,8 @@ end
 
 function drawGameOver()
     if shake_handler.duration > 0 then
-        love.graphics.translate(math.random(-shake_handler.magnetude, shake_handler.magnetude), math.random(-shake_handler.magnetude, shake_handler.magnetude))
+        love.graphics.translate(math.random(-shake_handler.magnetude, shake_handler.magnetude),
+            math.random(-shake_handler.magnetude, shake_handler.magnetude))
     end
     love.graphics.setColor(1, 0, 0)
     love.graphics.print("GAME OVER", window_width / 2 - 80, window_height / 2 - 100, 0, 2)
